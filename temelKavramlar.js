@@ -30,8 +30,10 @@ class RasyonelSayi extends GercekSayi {
 }
 class TamSayi extends RasyonelSayi {
     constructor(sayi) {
-        super(sayi);
-        this.sayi = sayi;
+       
+        super(Number.parseInt(sayi));
+        this.tekMi = sayi%2==0?false:true;
+        this.sayi = Number.parseInt(sayi);
         if (!Number.isInteger(sayi)) {
             console.error("Tam Sayı Olamaz.");
         }
@@ -40,21 +42,53 @@ class TamSayi extends RasyonelSayi {
 }
 class DogalSayi extends TamSayi {
     constructor(sayi) {
-        super(sayi);
-        if (sayi < 0 || !Number.isInteger(sayi)) {
-            console.error("Doğal Sayı Olamaz.");
+        if (Number.parseInt(sayi)<0) {
+            console.error(`${sayi} Negatif Sayı Doğal Sayı Olamaz.`);
+            sayi = -1 * sayi;
         }
+        if (sayi < 0 || !Number.isInteger(sayi))console.error("Doğal Sayı Olamaz.");
+        super(sayi); 
         this.faktoriyel = this.Faktoriyel();
+        this.asalMi = this.AsalMi();
+        this.asalCarpanlar = this.asalCarpanBulma();
     }
-
     Faktoriyel(x) {
         if (x == null) x = this.sayi;
         if (x == 1 || x == 0) return 1;
         return x * this.Faktoriyel(x - 1);
-      
     }
+    AsalMi(sayi){
+        if (sayi == null) sayi = this.sayi;
+        sayi = Number.parseInt(sayi);
+        let asal = true;
+        for (let i = 2; i <= Number.parseInt(sayi/2); i++) {
+            if (sayi%i == 0) {
+                asal = false;
+            }        
+        }
+        return asal;
+    }
+    asalCarpanBulma(sayi){
+        if (sayi == null) sayi = this.sayi;
+        sayi = Number.parseInt(sayi);
+        if (this.AsalMi(sayi)) return [sayi];
+        let carpanlar = [];
+        for (let i = 2; i < sayi; i++) {
+            if (this.AsalMi(i)) {
+                if (sayi % i == 0) {
+                    carpanlar.push(i);
+                }
+            }
+        }
+        return carpanlar;
+    }
+    
 }
 
-let x = new DogalSayi(7);
-console.log(x);
+
+
+
+let x = new DogalSayi(11)
+ console.log(x);
+
 
