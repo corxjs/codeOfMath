@@ -50,7 +50,7 @@ class DogalSayi extends TamSayi {
         super(sayi); 
         this.faktoriyel = this.Faktoriyel();
         this.asalMi = this.AsalMi();
-        this.asalCarpanlar = this.asalCarpanBulma();
+        this.asalCarpanlar = this.AsalCarpanlar();
     }
     Faktoriyel(x) {
         if (x == null) x = this.sayi;
@@ -68,7 +68,7 @@ class DogalSayi extends TamSayi {
         }
         return asal;
     }
-    asalCarpanBulma(sayi){
+    AsalCarpanlar(sayi){
         if (sayi == null) sayi = this.sayi;
         sayi = Number.parseInt(sayi);
         if (this.AsalMi(sayi)) return [sayi];
