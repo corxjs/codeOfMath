@@ -1,6 +1,7 @@
 /* MATH 1*/
 class Real {
     constructor(_number) {
+        if(_number == Infinity) return;
         this.value = _number;
         this.digitNumber = this.DigitNumber();
         this.isNumeral = this.IsNumeral()
@@ -21,7 +22,7 @@ class Real {
 }
 class Rational extends Real {
     constructor(_number) {
-        if (typeof _number == 'number') {
+        if (typeof _number == 'number' && !Number.isInteger(arguments[1])) {
             super(_number)
             if (_number == Infinity || typeof _number == NaN) {
                 console.error(`${_number} Can't be rational`);
@@ -31,15 +32,20 @@ class Rational extends Real {
                 this.deminator = 1;
             }
             return;
-        } else if (Number.isInteger(arguments[1])) {
+        }else if(arguments[1] == 0) {
+             super(Infinity);
+             console.log(`deminator can't be 0`);
+             return new class Undefined{};
+        }else if (Number.isInteger(arguments[1])) {
+            super(arguments[0]/ arguments[1]);
             this.numerator = arguments[0];
-            this.deminator = arguments[1]
+            this.deminator = arguments[1];
         } else {
+            super(_number.numerator / _number.deminator);
             this.numerator = _number.numerator;
             this.deminator = _number.deminator;
         }
-        super(_number.numerator / _number.deminator);
-        console.log(`fraction \n ++++++++++++++++++++ \n \t  ${_number.numerator}` + "\n\t ---\n" + `\t  ${_number.deminator} \n +++++++++++++++++++++`);
+        console.log(`fraction \n ++++++++++++++++++++ \n \t  ${this.numerator}` + "\n\t ---\n" + `\t  ${this.deminator} \n +++++++++++++++++++++`);
     }
 }
 class Integer extends Rational {
@@ -98,7 +104,7 @@ class Natural extends Integer {
 
 
 
-let x = new Rational(6, 8)
+let x = new Rational({numerator:1,deminator:4})
 console.log(x);
 
 
