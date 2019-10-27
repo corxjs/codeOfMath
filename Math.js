@@ -1,7 +1,7 @@
 /* MATH 1*/
 class Real {
-    constructor(number) {
-        this.value = number;
+    constructor(_number) {
+        this.value = _number;
         this.digitNumber = this.DigitNumber();
         this.isNumeral = this.IsNumeral()
     }
@@ -20,70 +20,86 @@ class Real {
     }
 }
 class Rational extends Real {
-    constructor(number) {
-        super(number)
-        if (number == Infinity || typeof number == NaN) {
-            console.error(`${number} Can't be rational`);
+    constructor(_number) {
+        if (typeof _number == 'number') {
+            super(_number)
+            if (_number == Infinity || typeof _number == NaN) {
+                console.error(`${_number} Can't be rational`);
+            }
+            if (this.constructor.name == "Rational") {
+                this.numerator = _number;
+                this.deminator = 1;
+            }
+            return;
+        } else if (Number.isInteger(arguments[1])) {
+            this.numerator = arguments[0];
+            this.deminator = arguments[1]
+        } else {
+            this.numerator = _number.numerator;
+            this.deminator = _number.deminator;
         }
+        super(_number.numerator / _number.deminator);
+        console.log(`fraction \n ++++++++++++++++++++ \n \t  ${_number.numerator}` + "\n\t ---\n" + `\t  ${_number.deminator} \n +++++++++++++++++++++`);
     }
 }
 class Integer extends Rational {
-    constructor(number) {
-        super(Number.parseInt(number));
-        this.isOdd = number%2==0?false:true;
-        this.number = Number.parseInt(number);
-        if (!Number.isInteger(number))console.error(`${number} Can't ınteger`);
+    constructor(_number) {
+        super(Number.parseInt(_number));
+        this.isOdd = _number % 2 == 0 ? false : true;
+        this._number = Number.parseInt(_number);
+        if (!Number.isInteger(_number)) console.error(`${_number} Can't ınteger`);
     }
 }
 class Natural extends Integer {
-    constructor(number) {
-        if (Number.parseInt(number)<0) {
-            console.error(`${number} Negatif Sayı Doğal Sayı Olamaz.`);
-            number = -1 * number;
+    constructor(_number) {
+        if (Number.parseInt(_number) < 0) {
+            console.error(`${_number} Negatif Sayı Doğal Sayı Olamaz.`);
+            _number = -1 * _number;
         }
-        if (number < 0 || !Number.isInteger(number))console.error(`${number} Can't be natural number`);
-        super(number); 
+        if (_number < 0 || !Number.isInteger(_number)) console.error(`${_number} Can't be natural _number`);
+        super(_number);
         this.factorial = this.Factorial();
         this.isPrime = this.IsPrime();
         this.primeMultipliers = this.PrimeMultipliers();
     }
-    Factorial(number) {
-        if (number == null) number = this.number;
-        if (number == 1 || number== 0) return 1;
-        return number * this.Factorial(number - 1);
+    Factorial(_number) {
+        if (_number == null) _number = this._number;
+        if (_number == 1 || _number == 0) return 1;
+        return _number * this.Factorial(_number - 1);
     }
-    IsPrime(number){
-        if (number == null) number = this.number;
-        number = Number.parseInt(number);
+    IsPrime(_number) {
+        if (_number == null) _number = this._number;
+        _number = Number.parseInt(_number);
         let prime = true;
-        for (let i = 2; i <= Number.parseInt(number/2); i++) {
-            if (number%i == 0) {
+        for (let i = 2; i <= Number.parseInt(_number / 2); i++) {
+            if (_number % i == 0) {
                 prime = false;
-            }        
+            }
         }
         return prime;
     }
-    PrimeMultipliers(number){
-        if (number == null) number = this.number;
-        number = Number.parseInt(number);
-        if (this.IsPrime(number)) return [number];
-        let multipliers= [];
-        for (let i = 2; i < number; i++) {
+    PrimeMultipliers(_number) {
+        if (_number == null) _number = this._number;
+        _number = Number.parseInt(_number);
+        if (this.IsPrime(_number)) return [_number];
+        let multipliers = [];
+        for (let i = 2; i < _number; i++) {
             if (this.IsPrime(i)) {
-                if (number % i == 0) {
+                if (_number % i == 0) {
                     multipliers.push(i);
                 }
             }
         }
         return multipliers;
     }
-    
+
 }
 
 
 
 
-let x = new Natural(11)
- console.log(x);
+let x = new Rational(6, 8)
+console.log(x);
+
 
 
