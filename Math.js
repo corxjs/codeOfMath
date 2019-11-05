@@ -1,111 +1,161 @@
 /* MATH 1*/
-class Real {
-    constructor(_number) {
-        if(_number == Infinity) return;
-        this.value = _number;
-        this.digitNumber = this.DigitNumber();
-        this.isNumeral = this.IsNumeral()
+class Gercek {
+    constructor(_sayi) {
+        if (_sayi == Infinity) return;
+        this.deger = _sayi;
     }
-    IsNumeral() {
-        return this.value < 10 && this.value >= 0;
+}
+class Rasyonel extends Gercek {
+    constructor(_sayi) {
+        
+        if (typeof _sayi == 'number' && !Number.isInteger(arguments[1])) {
+            super(_sayi)
+            if (_sayi == Infinity || typeof _sayi == NaN) {
+                console.error(`${_sayi} Rasyonel Olamaz`);
+            }
+            if (this.constructor.name == "Rasyonel") {
+                this.pay = _sayi;
+                this.payda = 1;
+            }
+            return;
+        } else if (arguments[1] == 0) {
+            super(Infinity);
+            console.log(`payda 0 olamaz.`);
+            return new class Undefined { };
+        } else if (Number.isInteger(arguments[1])) {
+            super(arguments[0] / arguments[1]);
+            this.pay = arguments[0];
+            this.payda = arguments[1];
+        } else {
+            super(_sayi.pay / _sayi.payda);
+            this.pay = _sayi.pay;
+            this.payda = _sayi.payda;
+        }
+        this.pozitifMi = _sayi < 0 ? false : true;
+        console.log(`kesir \n ++++++++++++++++++++ \n \t  ${this.pay}` + "\n\t ---\n" + `\t  ${this.payda} \n +++++++++++++++++++++`);
     }
-    DigitNumber() {
-        let temp = this.value;
-        let counter = 0;
+}
+class Tamsayi extends Rasyonel {
+    constructor(_sayi) {
+        super(Number.parseInt(_sayi));
+        this.tekMi = _sayi % 2 == 0 ? false : true;
+        this._sayi = Number.parseInt(_sayi);
+        if (!Number.isInteger(_sayi)) console.error(`${_sayi} Tam sayı olamaz`);
+        this.basamakSayisi = this.BasamakSayisiKac();
+        this.rakamMi = (this.deger < 10 && this.deger >= 0);
+    } 
+    BasamakSayisiKac() {
+        let temp = this.deger;
+        let sayac = 0;
         if (temp < 0) { temp = temp * -1 }
         while (temp !== 0) {
             temp = Math.floor(temp / 10);
-            ++counter;
+            ++sayac;
         }
-        return counter;
+        return sayac;
     }
 }
-class Rational extends Real {
-    constructor(_number) {
-        if (typeof _number == 'number' && !Number.isInteger(arguments[1])) {
-            super(_number)
-            if (_number == Infinity || typeof _number == NaN) {
-                console.error(`${_number} Can't be rational`);
-            }
-            if (this.constructor.name == "Rational") {
-                this.numerator = _number;
-                this.deminator = 1;
-            }
-            return;
-        }else if(arguments[1] == 0) {
-             super(Infinity);
-             console.log(`deminator can't be 0`);
-             return new class Undefined{};
-        }else if (Number.isInteger(arguments[1])) {
-            super(arguments[0]/ arguments[1]);
-            this.numerator = arguments[0];
-            this.deminator = arguments[1];
-        } else {
-            super(_number.numerator / _number.deminator);
-            this.numerator = _number.numerator;
-            this.deminator = _number.deminator;
+class Dogal extends Tamsayi {
+    constructor(_sayi) {
+        if (Number.parseInt(_sayi) < 0) {
+            console.error(`${_sayi} Negatif Sayı Doğal Sayı Olamaz.`);
+            _sayi = -1 * _sayi;
         }
-        console.log(`fraction \n ++++++++++++++++++++ \n \t  ${this.numerator}` + "\n\t ---\n" + `\t  ${this.deminator} \n +++++++++++++++++++++`);
+        if (_sayi < 0 || !Number.isInteger(_sayi)) console.error(`${_sayi} Dogal Sayı Olamaz`);
+        super(_sayi);
+        this._sayi = _sayi;
+        this.faktoriyel = this.Faktoriyel();
+        this.asalMi = this.AsalMi();
+        this.asalCarpanlar = this.AsalCarpanlar();
     }
-}
-class Integer extends Rational {
-    constructor(_number) {
-        super(Number.parseInt(_number));
-        this.isOdd = _number % 2 == 0 ? false : true;
-        this._number = Number.parseInt(_number);
-        if (!Number.isInteger(_number)) console.error(`${_number} Can't ınteger`);
+    Faktoriyel(_sayi) {
+        // fonksiyona parametre girilmemişse nesnenin constructor parametresi kullanılır.
+        if (_sayi == null) _sayi = this._sayi;
+        // Tanım gereği 1 ve 0 faktöriyel 1 dir. Ve geriye 1 döndürüyoruz.
+        if (_sayi == 1 || _sayi == 0) return 1;
+        // ardından girilen sayının 1 eksiği için tekrar bu fonksiyonu çağırıp özyineleme yapıyoruz. sonuç geri dönüyor.
+        return _sayi * this.Faktoriyel(_sayi - 1);
     }
-}
-class Natural extends Integer {
-    constructor(_number) {
-        if (Number.parseInt(_number) < 0) {
-            console.error(`${_number} Negatif Sayı Doğal Sayı Olamaz.`);
-            _number = -1 * _number;
-        }
-        if (_number < 0 || !Number.isInteger(_number)) console.error(`${_number} Can't be natural _number`);
-        super(_number);
-        this.factorial = this.Factorial();
-        this.isPrime = this.IsPrime();
-        this.primeMultipliers = this.PrimeMultipliers();
-    }
-    Factorial(_number) {
-        if (_number == null) _number = this._number;
-        if (_number == 1 || _number == 0) return 1;
-        return _number * this.Factorial(_number - 1);
-    }
-    IsPrime(_number) {
-        if (_number == null) _number = this._number;
-        _number = Number.parseInt(_number);
-        let prime = true;
-        for (let i = 2; i <= Number.parseInt(_number / 2); i++) {
-            if (_number % i == 0) {
-                prime = false;
+    AsalMi(_sayi) {
+        // fonksiyona parametre girilmemişse nesnenin constructor parametresi kullanılır.
+        if (_sayi == null) _sayi = this._sayi;
+        // tam sayı kontrolü
+        _sayi = Number.parseInt(_sayi);
+        // varsayılan olarak asallık durumuna "true" diyoruz ardından o sayının altındaki tüm sayılara bölünüyor.
+        // kendinden ve 1 den başka sayılardan 1 tanesine bile bölünse asallık özelliği "false" olarak değişecek
+        let asal = true;
+        for (let i = 2; i <= Number.parseInt(_sayi / 2); i++) {
+            if (_sayi % i == 0) {
+                asal = false;
             }
         }
-        return prime;
+        // asallık durumu geri döndürülüyor
+        return asal;
     }
-    PrimeMultipliers(_number) {
-        if (_number == null) _number = this._number;
-        _number = Number.parseInt(_number);
-        if (this.IsPrime(_number)) return [_number];
-        let multipliers = [];
-        for (let i = 2; i < _number; i++) {
-            if (this.IsPrime(i)) {
-                if (_number % i == 0) {
-                    multipliers.push(i);
+    AsalCarpanlar(_sayi) {
+        // fonksiyona parametre girilmemişse nesnenin constructor parametresi kullanılır.
+        if (_sayi == null) _sayi = this._sayi;
+        // girilen parametrenin tam sayı olmamasına karşın tamsayıya çevirilir.
+        _sayi = Number.parseInt(_sayi);
+        // Asal sayı mı kontrol edilir ve asalsa geriye döndürülür.
+        if (this.AsalMi(_sayi)) return [_sayi];
+        // asal sayı değilse asal çarpanlarına ayrılabilr bu çarpanların tutulacağı carpanlar adlı dizi olusturulur.
+        let carpanlar = [];
+        // ardından 2 den başlayarak tüm asal sayılara tek tek bölünür ve bölünebilenler asal çarpanı olarak carpan dizisine eklenir.
+        for (let i = 2; i < _sayi; i++) {
+            if (this.AsalMi(i)) {
+                if (_sayi % i == 0) {
+                    carpanlar.push(i);
                 }
             }
         }
-        return multipliers;
+        // :)
+        return carpanlar;
     }
-
+    // En Büyük Ortak Bölen Bulma Fonksiyonu
+    EBOB() {
+        // tüm bölenler tutacak
+        let bolenler = [];
+        //ortak olanları tutacak
+        let ortakBolenler = [];
+        // girilen tüm sayılara tek tek bakılıyor
+        for (let i = 0; i < arguments.length; i++) {
+            // her sayı asal çarpanlarına ayırılıyr
+            let asalCarpanlar = this.AsalCarpanlar(arguments[i]);
+            // asal çarpanlar bolenler dizisine eklenir
+            bolenler = bolenler.concat(asalCarpanlar);
+        }
+        // bolenler dizisindeki tüm elemanlar tek tek tüm sayılarla bölünüyor mu diye bakılır
+        bolenler.map(x=>{
+            // bölen her bir sayıya bölünüşünde bolenSayacı 1 arttırılır
+            let bolenSayaci = 0;
+            for (let i = 0; i < arguments.length; i++) {
+                if(Number.isInteger(arguments[i]/x)) bolenSayaci++;
+            }
+            // Eğer bölen sayacı ile parametre sayıcı eşit ise o bölen tüm parametreler bölünmüş demektir. Ve bu bölen
+            // ortak bölen dizisinde zaten ortak bölen dizisine eklenir.
+            if(bolenSayaci == arguments.length && !ortakBolenler.includes(x)) ortakBolenler.push(x);
+            
+        });
+        // varsayılan ebob 1'dir çünkü aralarında asal yada zaten asal sayılar girildiğinde
+        // ortak bölen olmadığı için tek ortak bölen 1'dir.
+        let ebob = 1;
+        // ortak bölenler varsa hepsi çarpılır ve ebob değeri güncellenir
+        ortakBolenler.map(x=>{
+            ebob *=x;
+        })
+        // hesaplanmış ebob değeri geriye döndürülür.
+        return ebob;
+    }
 }
 
 
-
-
-let x = new Rational({numerator:1,deminator:4})
+let x = new Rasyonel(2,3)
 console.log(x);
+
+
+
+
 
 
 
